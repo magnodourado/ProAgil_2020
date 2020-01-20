@@ -7,5 +7,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProAgil.Domain\ProAgil.Domain.csproj"/>
+    <ProjectReference Include="..\ProAgil.Repository\ProAgil.Repository.csproj"/>
   </ItemGroup>
 </Project>

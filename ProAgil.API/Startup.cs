@@ -11,7 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ProAgil.API.Data;
+using Newtonsoft.Json;
+using ProAgil.Repository;
 
 namespace ProAgil.API
 {
@@ -29,6 +30,11 @@ namespace ProAgil.API
         {
             services.AddDbContext<ProAgilContext>(
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IProAgilRepository, ProAgilRepository>();
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);;
             services.AddControllers();
             services.AddCors();
         }
@@ -43,7 +49,7 @@ namespace ProAgil.API
 
             //app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-
+            app.UseStaticFiles();
             app.UseRouting();
 
             app.UseAuthorization();

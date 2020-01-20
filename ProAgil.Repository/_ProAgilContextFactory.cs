@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Design;
 // não estiver registrado em DI, se você não estiver usando DI, ou se por algum motivo você prefira não ter um método 
 // BuildWebHost na classe Main do aplicativo ASP.NET Core. 
 
-namespace ProAgil.API.Data
+namespace ProAgil.Repository
 {
     public class ProAgilContextFactory : IDesignTimeDbContextFactory<ProAgilContext>
     {

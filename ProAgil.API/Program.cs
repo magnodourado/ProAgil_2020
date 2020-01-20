@@ -14,19 +14,19 @@ namespace ProAgil.API
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();          // Deve ser utilizado a fabrica de contexto pois o EF espera o contrutor de host CreateWebHostBuilder.
-            //CreateWebHostBuilder(args).Build().Run();     // Para não utilizar a fabrica de contexto        
+            //CreateHostBuilder(args).Build().Run();          // Deve ser utilizado a fabrica de contexto pois o EF espera o contrutor de host CreateWebHostBuilder.
+            CreateWebHostBuilder(args).Build().Run();     // Para não utilizar a fabrica de contexto        
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+//        public static IHostBuilder CreateHostBuilder(string[] args) =>
+//            Host.CreateDefaultBuilder(args)
+//                .ConfigureWebHostDefaults(webBuilder =>
+//                {
+//                   webBuilder.UseStartup<Startup>();
+//                });
                 
-//        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-//            WebHost.CreateDefaultBuilder(args)
-//               .UseStartup<Startup>();        
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+               .UseStartup<Startup>();        
     }
 }
