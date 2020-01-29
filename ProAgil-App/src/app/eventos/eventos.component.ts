@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { EventoService } from '../_services/evento.service';
 import { Evento } from '../_models/Evento';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 
 
@@ -11,26 +13,39 @@ import { Evento } from '../_models/Evento';
 })
 export class EventosComponent implements OnInit {
 
+  eventosAll: Evento[];
+  eventos: Evento[];
+  imagemLargura = 50;
+  imagemMargem = 2;
+  mostrarImagem = false;
+  modalRef: BsModalRef;
+  registerForm: FormGroup;
+
   // tslint:disable-next-line: variable-name
-  _filtroLista: string;
+  _filtroLista = '' ;
+
+  constructor(
+    private eventoService: EventoService,
+    private modalService: BsModalService
+    ) { }
 
   get filtroLista(): string {
     return this._filtroLista;
   }
   set filtroLista(value: string) {
     this._filtroLista = value;
-    this.eventosFiltrados = this._filtroLista ? this.filtrarEventos(this._filtroLista) : this.eventos;
+    console.log(this._filtroLista.length);
+    console.log(this._filtroLista.length);
+    this.eventos = this._filtroLista  ? this.filtrarEventos(this._filtroLista) : this.eventosAll;
   }
 
-  eventosFiltrados: Evento[];
-  eventos: Evento[];
-  imagemLargura = 50;
-  imagemMargem = 2;
-  mostrarImagem = false;
-
-  constructor(private eventoService: EventoService) { }
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
 
   ngOnInit() { // roda antes do html ficar pronto
+    console.log('ngOnInit');
+    this.validation();
     this.getEventos();
   }
 
@@ -45,12 +60,30 @@ export class EventosComponent implements OnInit {
     this.mostrarImagem = !this.mostrarImagem;
   }
 
+  validation() {
+    this.registerForm = new FormGroup({
+      tema: new FormControl('',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(50)]),
+      local: new FormControl('', Validators.required),
+      dataEvento: new FormControl('', Validators.required),
+      imagemURL: new FormControl('', Validators.required),
+      qtdPessoas: new FormControl('',
+        [Validators.required, Validators.max(120000)]),
+      telefone: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email])
+    });
+  }
+
+  salvarAlteracoes() {
+
+  }
+
   getEventos() {
+    console.log('getEventos');
     this.eventoService.getAllEvento().subscribe(
-      // tslint:disable-next-line: variable-name
-      (_eventos: Evento[]) => {
-      this.eventos = _eventos;
-      console.log(_eventos);
+      (eventosAll: Evento[]) => {
+      this.eventos = eventosAll;
+      this.eventosAll = eventosAll;
     }, error => {
         console.log(error);
     }

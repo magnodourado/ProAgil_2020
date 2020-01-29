@@ -8,6 +8,7 @@ import { Evento } from '../_models/Evento';
 })
 export class EventoService {
   baseURL = 'http://localhost:5000/api/evento';
+  eventoTeste: any;
 
   constructor(private http: HttpClient) { }
 
@@ -16,6 +17,7 @@ export class EventoService {
   }
 
   getEventoByTema(tema: string): Observable<Evento[]> {
+
     return this.http.get<Evento[]>(`${this.baseURL}/getByTema/${tema}`);
   }
 
