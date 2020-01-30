@@ -113,8 +113,10 @@
     <div class="form-group col-md-4">
       <label>Data e Hora</label>
       <input type="text" class="form-control" 
+      [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY hh:mm a' }"
       [ngClass]="{'is-invalid': registerForm.get('dataEvento').errors && registerForm.get('dataEvento').touched}"
-      formControlName = "dataEvento">
+      formControlName = "dataEvento" 
+      bsDatepicker>
       <div *ngIf="registerForm.get('dataEvento').errors 
       && registerForm.get('dataEvento').touched"  class="invalid-feedback">
         A data é obrigatória.
@@ -181,9 +183,10 @@
 <button class="btn btn-secondary" (click)="openModal(template)">
   Fechar
 </button>
-<button class="btn btn-primary" (click)="salvarAlteracao()">
+<button class="btn btn-primary" [disabled] = "!registerForm.valid" (click)="salvarAlteracoes()">
   Salvar Alterações
 </button>
-
 <br>
 <br>
+<p>Form Value: {{registerForm.value | json}}</p>
+<p>Form Status: {{registerForm.status | json}}</p>
