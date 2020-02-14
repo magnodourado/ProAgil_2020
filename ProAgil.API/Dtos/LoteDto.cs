@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ProAgil.API.Dtos
 {
     public class LoteDto
@@ -7,6 +9,7 @@ namespace ProAgil.API.Dtos
         public decimal Preco { get; set; }
         public string DataInicio { get; set; }
         public string DataFim { get; set; }
+        [Range(5,120000)]
         public int Quantidade { get; set; }
     }
 }
