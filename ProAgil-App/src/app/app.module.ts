@@ -13,11 +13,13 @@ import { EventoService } from './_services/evento.service';
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
 import { NavComponent } from './nav/nav.component';
-
-import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
 import { PalestrantesComponent } from './palestrantes/palestrantes.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContatosComponent } from './contatos/contatos.component';
+import { TitleComponent } from './_shared/title/title.component';
+
+import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
+import { from } from 'rxjs';
 
 @NgModule({
    declarations: [
@@ -27,7 +29,8 @@ import { ContatosComponent } from './contatos/contatos.component';
       PalestrantesComponent,
       DashboardComponent,
       ContatosComponent,
-      DateTimeFormatPipePipe
+      DateTimeFormatPipePipe,
+      TitleComponent
    ],
    imports: [
       CommonModule,

@@ -7,10 +7,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const routes: Routes = [
-  {path: 'eventos', component: EventosComponent},
-  {path: 'palestrantes', component: PalestrantesComponent},
-  {path: 'contatos', component: ContatosComponent},
-  {path: 'dashboard', component: DashboardComponent}
+  {path: 'eventos', component: EventosComponent },
+  {path: 'palestrantes', component: PalestrantesComponent },
+  {path: 'contatos', component: ContatosComponent },
+  {path: 'dashboard', component: DashboardComponent },
+  {path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+  // Sempre por último para quando não der match com as anteriores.
+  {path: '**', redirectTo: 'dashboard', pathMatch: 'full'}
 ];
 
 @NgModule({
