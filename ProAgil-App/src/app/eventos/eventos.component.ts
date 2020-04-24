@@ -23,9 +23,13 @@ export class EventosComponent implements OnInit {
   registerForm: FormGroup;
   modoSalvar: string;
   bodyDeletarEvento: any;
+  file: File;
 
   // tslint:disable-next-line: variable-name
   _filtroLista = '' ;
+  nomeArquivoUpload: string;
+  numeroAleatorio: string;
+  dataAtual: string;
 
   constructor(
     private eventoService: EventoService,
@@ -42,13 +46,10 @@ export class EventosComponent implements OnInit {
   }
   set filtroLista(value: string) {
     this._filtroLista = value;
-    console.log(this._filtroLista.length);
-    console.log(this._filtroLista.length);
     this.eventos = this._filtroLista  ? this.filtrarEventos(this._filtroLista) : this.eventosAll;
   }
 
   ngOnInit() { // roda antes do html ficar pronto
-    console.log('ngOnInit');
     this.validation();
     this.getEventos();
   }
@@ -82,7 +83,6 @@ export class EventosComponent implements OnInit {
   }
 
   getEventos() {
-    console.log('getEventos');
     this.eventoService.getAllEvento().subscribe(
       (eventosAll: Evento[]) => {
       this.eventos = eventosAll;
@@ -100,10 +100,12 @@ export class EventosComponent implements OnInit {
   }
 
   editarEvento(evento: Evento, template: any) {
-    this.evento = evento;
+    this.evento = Object.assign({}, evento);
+    this.nomeArquivoUpload = this.evento.imagemURL.toString();
+    this.evento.imagemURL = '';
     this.modoSalvar = 'put';
     this.openModal(template);
-    this.registerForm.patchValue(evento);
+    this.registerForm.patchValue(this.evento);
   }
 
   excluirEvento(evento: Evento, template: any){
@@ -117,42 +119,91 @@ export class EventosComponent implements OnInit {
       () => {
           template.hide();
           this.getEventos();
-          this.toastr.success('Deletado com sucesso!', 'Evento');
+          this.toastr.success('Deletado com sucesso!', 'Evento', {
+            progressBar: true, progressAnimation: 'decreasing', timeOut: 3000
+          });
         }, error => {
-          this.toastr.error(`Erro ao deletar: ${error}`, 'Evento');
+          this.toastr.error(`Erro ao deletar: ${error}`, 'Evento', {
+            progressBar: true, progressAnimation: 'decreasing', timeOut: 3000
+          });
           console.log(error);
         }
     );
+  }
+
+  onFileChange(event) {
+    const reader =  new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+        this.file = event.target.files;
+    }
+  }
+
+  uploadimagem() {
+    if (this.modoSalvar === 'post') {
+      const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+      this.numeroAleatorio = Math.floor(Math.random() * 65536).toString();
+
+      this.evento.imagemURL = this.numeroAleatorio + nomeArquivo[2];
+
+      this.eventoService.postUpload(this.file, this.evento.imagemURL).subscribe(
+        () => {
+          this.dataAtual = new Date().getMilliseconds().toString();
+          this.getEventos();
+        }
+      );
+    } else {
+      this.evento.imagemURL = this.nomeArquivoUpload;
+      this.eventoService.postUpload(this.file, this.evento.imagemURL).subscribe(
+        () => {
+          this.dataAtual = new Date().getMilliseconds().toString();
+          this.getEventos();
+        }
+      );
+    }
   }
 
   salvarAlteracoes(template: any) {
     if (this.registerForm.valid) {
       if (this.modoSalvar === 'post') {
         this.evento = Object.assign({}, this.registerForm.value);
+
+        this.uploadimagem();
+
         this.eventoService.postEvento(this.evento).subscribe(
           (novoEvento: Evento) => {
             template.hide();
             this.getEventos();
-            this.toastr.success('Incluído com sucesso!', 'Evento');
+            this.toastr.success('Incluído com sucesso!', 'Evento', {
+              progressBar: true, progressAnimation: 'decreasing', timeOut: 3000
+            });
           }, error => {
-            this.toastr.error(`Erro ao incluir: ${error}`, 'Evento');
+            this.toastr.error(`Erro ao incluir: ${error}`, 'Evento', {
+              progressBar: true, progressAnimation: 'decreasing', timeOut: 3000
+            });
             console.log(error);
           }
         );
       } else {
         this.evento = Object.assign({id: this.evento.id}, this.registerForm.value);
+
+        this.uploadimagem();
+
         this.eventoService.putEvento(this.evento).subscribe(
           () => {
             template.hide();
             this.getEventos();
-            this.toastr.success('Editado com sucesso!', 'Evento');
+            this.toastr.success('Editado com sucesso!', 'Evento', {
+              progressBar: true, progressAnimation: 'decreasing', timeOut: 3000
+            });
           }, error => {
-            this.toastr.error(`Erro ao editar: ${error}`, 'Evento');
+            this.toastr.error(`Erro ao editar: ${error}`, 'Evento', {
+              progressBar: true, progressAnimation: 'decreasing', timeOut: 3000
+            });
             console.log(error);
           }
         );
       }
     }
   }
-
 }
