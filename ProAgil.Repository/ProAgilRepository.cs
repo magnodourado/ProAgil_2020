@@ -27,6 +27,10 @@ namespace ProAgil.Repository
         {
             _context.Remove(entity);
         }
+        public void DeleteRange<T>(T[] entityArray) where T : class
+        {
+            _context.RemoveRange(entityArray);
+        }
         public async Task<bool> SaveChangesAsync()
         {
             return (await _context.SaveChangesAsync()) > 0;
@@ -43,7 +47,8 @@ namespace ProAgil.Repository
                             .ThenInclude(p => p.Palestrante);
             }
 
-            query = query.OrderBy(c => c.Id);
+            query = query.AsNoTracking()
+                    .OrderBy(c => c.Id);
 
             return await query.ToArrayAsync();
         }
@@ -58,7 +63,8 @@ namespace ProAgil.Repository
                             .ThenInclude(p => p.Palestrante);
             }
 
-            query = query.OrderByDescending(c => c.DataEvento)
+            query = query.AsNoTracking()
+                        .OrderByDescending(c => c.DataEvento)
                         .Where(c => c.Tema.ToLower().Contains(tema.ToLower()));
 
             return await query.ToArrayAsync();
@@ -73,7 +79,8 @@ namespace ProAgil.Repository
                             .ThenInclude(p => p.Palestrante);
             }
 
-            query = query.OrderByDescending(c => c.DataEvento)
+            query = query.AsNoTracking()
+                        .OrderByDescending(c => c.DataEvento)
                         .Where(c => c.Id == EventoId);
 
             return await query.FirstOrDefaultAsync();

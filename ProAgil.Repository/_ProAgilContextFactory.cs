@@ -13,6 +13,7 @@ namespace ProAgil.Repository
         public ProAgilContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ProAgilContext>();
+            optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseSqlite("Data Source = ProAgil.db");
 
             return new ProAgilContext(optionsBuilder.Options);

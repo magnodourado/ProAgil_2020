@@ -16,7 +16,7 @@ export class EventosComponent implements OnInit {
   titulo = 'Eventos';
   eventosAll: Evento[];
   eventos: Evento[];
-  evento: any;
+  evento: Evento = new Evento();
   imagemLargura = 50;
   imagemMargem = 2;
   mostrarImagem = false;
@@ -83,6 +83,7 @@ export class EventosComponent implements OnInit {
   }
 
   getEventos() {
+    this.dataAtual = new Date().getMilliseconds().toString();
     this.eventoService.getAllEvento().subscribe(
       (eventosAll: Evento[]) => {
       this.eventos = eventosAll;
@@ -100,11 +101,11 @@ export class EventosComponent implements OnInit {
   }
 
   editarEvento(evento: Evento, template: any) {
+    this.modoSalvar = 'put';
+    this.openModal(template);
     this.evento = Object.assign({}, evento);
     this.nomeArquivoUpload = this.evento.imagemURL.toString();
     this.evento.imagemURL = '';
-    this.modoSalvar = 'put';
-    this.openModal(template);
     this.registerForm.patchValue(this.evento);
   }
 

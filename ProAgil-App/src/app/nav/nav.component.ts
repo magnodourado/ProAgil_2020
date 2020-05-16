@@ -31,4 +31,8 @@ export class NavComponent implements OnInit {
     this.toastr.show('Usuario desconectado.');
     this.router.navigate(['/user/login']);
   }
+
+  userName() {
+    return sessionStorage.getItem('username');
+  }
 }
